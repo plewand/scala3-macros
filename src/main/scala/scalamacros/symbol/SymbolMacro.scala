@@ -13,7 +13,7 @@ object Symbols {
     val grandParent = Expr(Symbol.spliceOwner.owner.owner.name)
 
     // The body of the function can be created with quoting and splicing.
-    // If can be also created with use of reflection module.
+    // It can be also created with use of reflection module.
     val functionBody: Expr[Unit] = '{ 
       println(s"Splice owner: ${$owner}, parent ${$parent}, grandParent ${$grandParent}")      
     }

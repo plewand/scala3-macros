@@ -5,10 +5,10 @@ import scala.quoted.*
 // Creating a class with Quotes argument allows to share quotes and reflect import across all the
 // methods of the class and easily split the logic.
 class StatementGenerator(using Quotes) {
-  // In case of problems with finding the file set it to absolute path.
+  // In case of problems with finding the file, set it to absolute path.
   val SchemaPath = "sql/schema.sql"
 
-  // This import is dependent on Quotes that are visible in the scope
+  // This import is dependent on Quotes that are visible in the scope.
   import quotes.reflect.*
 
   // This class will create DbType enum based on TypeRepr of the type.
@@ -27,13 +27,14 @@ class StatementGenerator(using Quotes) {
       columnInfo: Seq[ColumnInfo]
   ): Unit = {
     val parsed = SqlParser.parse(SchemaPath)
-    println(parsed)
+    
     val schemaColumns = parsed.getOrElse(
       tableName,
       report.throwError(
         "Schema doesn't have table definded with name: " + tableName
       )
     )
+    
     columnInfo.foreach(ci => {
       val schemaColumn = schemaColumns
         .find(_.name == ci.name)

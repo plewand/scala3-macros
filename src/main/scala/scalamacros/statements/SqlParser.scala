@@ -1,9 +1,9 @@
 package scalamacros.statements
 
 // All supported database column types, in this example limited to String and Int.
-enum DbType(sqlNames: String) {
-  case DbInt extends DbType("int")
-  case DbString extends DbType("text")
+enum DbType {
+  case DbInt
+  case DbString
 }
 
 // Auxiliary class to keep parsed column information.

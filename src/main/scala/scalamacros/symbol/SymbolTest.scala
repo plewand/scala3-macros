@@ -6,7 +6,7 @@ import scalamacros.logast.logAST
 
   def printSymbols = Symbols.printSymbols()
 
-  // It will print: Splice owner: macro, parent printUppercase, grandParent symbolTest
+  // It will print: Splice owner: macro, parent printSymbols, grandParent symbolTest
   printSymbols()
 
   // To find how the function definition should be constructed in the macro.
