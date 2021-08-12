@@ -5,7 +5,7 @@ The program generates type safe prepared statements on compilation time aligned 
 
 Also, it contains some other macro examples explaining macros features. 
 
-The program is described in the blog here <>.
+The program is described in the blog [here](https://pawel7.medium.com/scala-3-macros-without-pain-ce54d116880a).
 
 ### Examples
 
