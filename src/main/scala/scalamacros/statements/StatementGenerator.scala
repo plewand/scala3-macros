@@ -80,7 +80,16 @@ class StatementGenerator(using Quotes) {
 
     // Low level AST is matched in the case below, the structure can be seen with show(using Printer.TreeStructure).
     paramMapping match {
+      // Case with a single parameter
+      case Inlined(None, Nil, Apply(TypeApply(Select(Ident("ColDef"), "apply"), _), columnDefs)) =>
+        println(
+            "Single parameter term: " + paramMapping.show(using Printer.TreeStructure)
+        )
 
+        Seq(parseColumDef(paramMapping))
+
+
+      // Multiple parameters case
       case Inlined(None, Nil, Apply(TypeApply(_, _), columnDefs)) =>
         columnDefs.map(columnDefsTerm =>
           println(
@@ -106,7 +115,7 @@ class StatementGenerator(using Quotes) {
     s"INSERT INTO $tableName ($columnNames) VALUES ($placeholders)"
   }
 
-  def createPreparedStatementImpl[A <: Tuple: Type](
+  def createPreparedStatementImpl[A: Type](
       table: Expr[String],
       columnMapping: Expr[A]
   ): Expr[PreparedStatement[CallArgs[A]]] = {
@@ -138,7 +147,7 @@ class StatementGenerator(using Quotes) {
 object StatementGenerator {
 
   // Auxilirary function to create the class as the inlined main maro function needs a single expression.
-  private def callImplementation[A <: Tuple: Type](
+  private def callImplementation[A: Type](
       tableName: Expr[String],
       columnMapping: Expr[A]
   )(using
@@ -147,7 +156,7 @@ object StatementGenerator {
     new StatementGenerator()
       .createPreparedStatementImpl[A](tableName, columnMapping)
 
-  inline def createPreparedStatement[A <: Tuple](inline tableName: String)(
+  inline def createPreparedStatement[A](inline tableName: String)(
       inline columnMapping: A
   ): PreparedStatement[CallArgs[A]] = ${
     callImplementation[A]('tableName, 'columnMapping)

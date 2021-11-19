@@ -1,10 +1,10 @@
-val scala3Version = "3.0.1"
+val scala3Version = "3.1.0"
 
 lazy val root = project
   .in(file("."))
   .settings(
     name := "scala3-macros",
-    version := "0.1.0",
+    version := "0.1.1",
 
     // Additional check useful during development
     scalacOptions ++= Seq(

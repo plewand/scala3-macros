@@ -2,9 +2,10 @@ package scalamacros.statements
 
 // Type matching - a new Scala 3 feature - is used to construct the type that will be used
 // to pass runtime arguments to the generated prepared statement.
-type CallArgs[Xs <: Tuple] <: Tuple = Xs match
+type CallArgs[Xs]  = Xs match
   case EmptyTuple   => Xs
   case ColDef[b] *: xs => b *: CallArgs[xs]
+  case ColDef[b] => b
 
 // A class to simulate an unsafe statement.
 class UsafeStatement(sql: String) {
@@ -14,9 +15,10 @@ class UsafeStatement(sql: String) {
 }
 
 // Type safe prepared statemnet.
-class PreparedStatement[A <: Tuple](statement: UsafeStatement) {
-  def insert(rowItems: A) : Unit ={
-    statement.insert(rowItems.toList:_*)
+class PreparedStatement[A](statement: UsafeStatement) {
+  def insert(rowItems: A) : Unit = rowItems match {
+    case tuple: Tuple => statement.insert(tuple.toList:_*)
+    case single => statement.insert(single)
   }
 }
 

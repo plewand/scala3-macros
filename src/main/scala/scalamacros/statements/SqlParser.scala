@@ -13,13 +13,13 @@ case class ColumnInfo(val dbType: DbType, name: String)
 object SqlParser {
   def parse(path: String): Map[String, Seq[ColumnInfo]] = {
     val content = scala.io.Source.fromFile(path).mkString
-    val statements = content.split(";")
+    val statements = content.split(";").filterNot(_.isBlank)
     statements.map(parseStatement).toMap
   }
 
   private def parseStatement(statement: String) ={
     val splatStatement = statement.split("[\\s,:]").filterNot(_.isBlank).map(_.toLowerCase)
-    println(splatStatement.mkString(","))
+    println(s"Statement: ${splatStatement.mkString(",")}")
     val tableName = splatStatement(2)
     val columns = splatStatement.drop(4).dropRight(1)
     val colInfo = columns.toSeq
